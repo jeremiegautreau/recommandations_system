@@ -56,7 +56,7 @@ def cf_item_pearson(df, user, df_movie):
     matrix_norm = matrix_norm # based matrix for recommandations
 
     pred = recommendation_item (user, nb_item, nb_reco, matrix, matrix_norm)
-    pred['index'] = pred['index'].astype(int)
+    
 
     pred_mov = pd.merge(pred, df_movie, left_on='index', right_on = 'movieId', how = 'left')
 
