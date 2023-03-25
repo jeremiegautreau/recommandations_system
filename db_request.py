@@ -2,8 +2,10 @@
 import pandas as pd
 import numpy as np
 import mysql.connector as mysql
+from sqlalchemy import create_engine, text
 
-def db_connect():
+
+""" def db_connect():
     db = mysql.connect(
         host = "localhost",
         user = "root",
@@ -20,20 +22,57 @@ def db_connect():
     else:
         print ('connection failed')
 
-    return db, cursor
+    return db, cursor """
 
-def data_request(db):
-    df=pd.read_sql(""" SELECT * FROM user""", con = db)
+def db_connect():
+    
+    url = 'mysql+pymysql://root:jro35all!@localhost/recosyst'
+    engine = create_engine(url)
+    connection = engine.connect()
+
+    return connection
+
+# def data_request(db):
+#     df=pd.read_sql(""" SELECT * FROM user""", con = db)
+
+#     df.drop(columns= ['nom', 'prenom'], inplace= True)
+#     df.set_index('userId', inplace=True) 
+
+def data_request(connection):
+    # with engine.connect().execution_options(autocommit=True) as conn:
+    query = text('SELECT * FROM user') 
+    df=pd.read_sql_query(sql = query, con = connection)
+
+    df.drop(columns= ['nom', 'prenom'], inplace= True)
+    df.set_index('userId', inplace=True)
 
     return df
 
-def user_request(cursor):
-    cursor.execute("SELECT MAX(id) FROM user")
-    user = cursor.fetchall()
+# def user_request(cursor):
+#     cursor.execute("SELECT MAX(userId) FROM user")
+#     user = cursor.fetchone()
 
-    return user
+#     return user[0]
 
-def close_connection(db, cursor):
-    cursor.close()
-    db.close()
+def user_request(connection):
+    query =connection.execute(text("SELECT MAX(userId) FROM user"))
+    # user =pd.read_sql_query (sql = query, con = connection)
+    user =query.fetchone()
 
+
+    return user[0]
+
+def data_movie(connection):
+    # with engine.connect().execution_options(autocommit=True) as conn:
+    query = text('SELECT * FROM movie') 
+    df=pd.read_sql_query(sql = query, con = connection)
+
+    return df
+
+# def close_connection(db, cursor):
+#     cursor.close()
+#     db.close()
+
+def close_connection(connection):
+    connection.close()
+    
