@@ -10,8 +10,6 @@ def main():
     df = data_request(connection)
 
     user = user_request(connection)
-    
-    # user = 1
 
     df_movie = data_movie(connection)
 
@@ -20,8 +18,7 @@ def main():
     reco = cf_item_pearson(df, user, df_movie)
 
     print(reco)
-    
-    # return reco
+
 
 if __name__ == "__main__":
     main()
