@@ -1,11 +1,11 @@
 <?php
-   // retrieving variables for form
+   // retrieving variables from form
    function retrieve_data(){
    $data = $_POST;
 
-   return $data
+   return $data;
    } 
 
-   // echo implode(", ", $data); // print comma separated values
+   //echo implode(", ", $data); // print comma separated values
 
 ?>
