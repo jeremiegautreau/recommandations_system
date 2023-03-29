@@ -11,11 +11,19 @@ def main():
 
     user = user_request(connection)
 
+    moteur = moteur_request(connection)
+
     df_movie = data_movie(connection)
 
     close_connection(connection)
 
-    reco = cf_item_pearson(df, user, df_movie)
+    if moteur == 'fc_item':
+        reco = cf_item_pearson(df, user, df_movie)
+    elif moteur == 'fc_user':
+        reco = cf_user_cos (df, user, df_movie)
+    elif moteur == 'knn':
+        reco = reco_item_knn (df, user, df_movie)
+    
 
     print(reco)
 
