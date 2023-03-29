@@ -43,7 +43,7 @@ def data_request(connection):
     query = text('SELECT * FROM user') 
     df=pd.read_sql_query(sql = query, con = connection)
 
-    df.drop(columns= ['nom', 'prenom'], inplace= True)
+    df.drop(columns= ['nom', 'prenom', 'moteur'], inplace= True)
     df.set_index('userId', inplace=True)
 
     return df
@@ -61,6 +61,14 @@ def user_request(connection):
 
 
     return user[0]
+
+def moteur_request(connection):
+    query =connection.execute(text("SELECT moteur FROM user WHERE userId = (SELECT MAX(userId) from user)"))
+    # user =pd.read_sql_query (sql = query, con = connection)
+    moteur =query.fetchone()
+
+
+    return moteur[0]
 
 def data_movie(connection):
     # with engine.connect().execution_options(autocommit=True) as conn:
