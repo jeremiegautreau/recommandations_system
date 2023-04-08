@@ -1,7 +1,9 @@
 <?php
     
     function db_insertion($data){
-        // test connection with database
+        """ test connection with database and insert data
+            : param data : data retrieve from post method"""
+
         $servername = "localhost";
         $username = "root";
         $password = "jro35all!";
@@ -18,8 +20,6 @@
         // insertion of variables in database
 
         $insert = array_values($data);
-
-        //$conn->beginTransaction();
 
         $sql = "INSERT INTO user (nom, 
                                 prenom,
@@ -131,9 +131,7 @@
                                     )"; 
         $conn->prepare($sql)->execute($insert);
 
-        //$conn->commit();
-
-        $conn = null;    
+        $conn = null; // closing the connection after insertion.   
     }  
 
 ?>

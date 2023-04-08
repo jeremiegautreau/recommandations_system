@@ -6,7 +6,7 @@ from sklearn.neighbors import NearestNeighbors
 
 
 def recommendation_item (user, nb_item, nb_reco, matrix, matrix_norm):
-    # print(matrix_norm.index)
+    
     unwatched_movie = matrix_norm[user].loc[matrix_norm[user].isna()].sort_values(ascending=False)\
                                             .reset_index()\
                                             .rename(columns={user:'pred_rating'})
