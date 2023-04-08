@@ -58,7 +58,6 @@ def cf_item_pearson(df, user, df_movie):
     matrix_norm = matrix_norm # based matrix for recommandations
 
     pred = recommendation_item (user, nb_item, nb_reco, matrix, matrix_norm)
-    
 
     pred_mov = pd.merge(pred, df_movie, left_on='index', right_on = 'movieId', how = 'left')
 
@@ -106,17 +105,15 @@ def cf_user_cos (df, user, df_movie):
                                                ascending=False)[:10]
     
     reco = pd.merge(ranked_item, df_movie, left_on='movie', right_on = 'movieId', how = 'left')
-
     reco = reco[['title', 'genres']].to_html(index=False)
 
     return reco
 
 
 def reco_item_knn (df, user, df_movie):
+    
     matrix = df.T
-
     matrix_norm = matrix.subtract(matrix.mean(axis=1), axis = 0)
-
     matrix_norm.fillna(0, inplace=True)
 
     unwatched_movie = matrix_norm[user].loc[matrix_norm[user]==0].reset_index().iloc[:,0:1]
@@ -125,9 +122,7 @@ def reco_item_knn (df, user, df_movie):
                                                 .reset_index()\
                                                 .rename(columns={user:'rating'})
 
-
     model_nn = NearestNeighbors(metric='cosine', algorithm='brute', n_neighbors=7, n_jobs=-1)
-
     model_nn.fit(matrix_norm)
 
     recommand = []
@@ -145,13 +140,10 @@ def reco_item_knn (df, user, df_movie):
                 recommand.append(rec)
 
     result = pd.DataFrame(recommand).sort_values(by='distance')   
-
     result = result.drop_duplicates(subset =['movieId'])
-    
     result = result.loc[result['movieId'].isin(unwatched_movie['index'])]
 
     reco = pd.merge(result, df_movie, left_on='movieId', right_on = 'movieId', how = 'left')
-    
     reco = reco[['title', 'genres']][:5].to_html(index = False) 
     
     return reco

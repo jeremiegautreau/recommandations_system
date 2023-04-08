@@ -59,14 +59,12 @@ def user_request(connection):
     # user =pd.read_sql_query (sql = query, con = connection)
     user =query.fetchone()
 
-
     return user[0]
 
 def moteur_request(connection):
     query =connection.execute(text("SELECT moteur FROM user WHERE userId = (SELECT MAX(userId) from user)"))
     # user =pd.read_sql_query (sql = query, con = connection)
     moteur =query.fetchone()
-
 
     return moteur[0]
 
