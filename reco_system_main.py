@@ -24,10 +24,8 @@ def main():
         reco = cf_user_cos (df, user, df_movie)
     elif moteur == 'knn':
         reco = reco_item_knn (df, user, df_movie)
-    
 
     print(reco)
-
 
 if __name__ == "__main__":
     main()
