@@ -1,12 +1,18 @@
 import pandas as pd # work with the datasets
 import numpy as np # work with the datasets
 from sklearn.metrics.pairwise import cosine_similarity # calculate the cosine similiratry
-from sklearn.neighbors import NearestNeighbors
+from sklearn.neighbors import NearestNeighbors # use KNN  algorithm
 
 
 
 def recommendation_item (user, nb_item, nb_reco, matrix, matrix_norm):
-    
+    """make te recommandation for the item based collaborative filtering
+        :param user: userId for the recommandation
+        :param nb_item: number of item to compare each time for similitude
+        :param nb_reco: number of recommandations to return
+        :param matrix : correlation matrix
+        :param matrix_norm: utility matrix"""
+
     unwatched_movie = matrix_norm[user].loc[matrix_norm[user].isna()].sort_values(ascending=False)\
                                             .reset_index()\
                                             .rename(columns={user:'pred_rating'})
@@ -39,6 +45,11 @@ def recommendation_item (user, nb_item, nb_reco, matrix, matrix_norm):
 
 
 def cf_item_pearson(df, user, df_movie):
+    """make the recommandations with the item based collaborative filtering
+        :param df: utility matrix
+        :param user: userId for the recommandation
+        :param df_movie:info on movies"""
+
     matrix = df.T
     """ matrix = pd.pivot_table(df, 
                         values = ['rating'],
@@ -61,11 +72,16 @@ def cf_item_pearson(df, user, df_movie):
 
     pred_mov = pd.merge(pred, df_movie, left_on='index', right_on = 'movieId', how = 'left')
 
-    reco =pred_mov[['title', 'genres', 'pred_rating']].to_html(index = False)
+    reco =pred_mov[['title', 'genres']].to_html(index = False)
 
     return reco
 
 def cf_user_cos (df, user, df_movie):
+    """make the recommandations with the user based collaborative filtering
+        :param df: utility matrix
+        :param user: userId for the recommandation
+        :param df_movie:info on movies"""
+
 
     matrix_norm = df.subtract(df.mean(axis=1), axis = 0) # normalization
 
@@ -111,6 +127,10 @@ def cf_user_cos (df, user, df_movie):
 
 
 def reco_item_knn (df, user, df_movie):
+    """make the recommandations with the KNN model
+        :param df: utility matrix
+        :param user: userId for the recommandation
+        :param df_movie:info on movies"""
     
     matrix = df.T
     matrix_norm = matrix.subtract(matrix.mean(axis=1), axis = 0)
@@ -130,8 +150,6 @@ def reco_item_knn (df, user, df_movie):
     for movie in watched_movie['index'][:10]:
         distances, indices = model_nn.kneighbors(matrix_norm.loc[movie,:].values.reshape(1,-1))
 
-
-
         for i in range(0, len(distances.flatten())):
             if i != 0:
                 rec = {}
@@ -147,4 +165,7 @@ def reco_item_knn (df, user, df_movie):
     reco = reco[['title', 'genres']][:5].to_html(index = False) 
     
     return reco
+
+if __name__ == '__main__':
+    pass
 
