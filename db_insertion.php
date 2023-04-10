@@ -1,8 +1,8 @@
 <?php
     
     function db_insertion($data){
-        """ test connection with database and insert data
-            : param data : data retrieve from post method"""
+        /* test connection with database and insert data
+        : param data : data retrieve from post method */
 
         $servername = "localhost";
         $username = "root";
@@ -17,7 +17,7 @@
             echo "Connection failed: " . $e->getMessage();
         }
 
-        // insertion of variables in database
+        /*insertion of variables into the database */
 
         $insert = array_values($data);
 
