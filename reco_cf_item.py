@@ -88,18 +88,22 @@ def cf_user_cos (df, user, df_movie):
     movie_cos = cosine_similarity(matrix_norm.fillna(0))
     movie_cos = pd.DataFrame(movie_cos, columns = matrix_norm.index, index = matrix_norm.index)
 
+
     item_score = {}
 
-    user_sim = movie_cos[user].loc[movie_cos.index != user].sort_values(ascending = False)[:10]
+    user_sim = movie_cos[user].loc[movie_cos.index != user].sort_values(ascending = False)[:20]
 
     watched_movie = matrix_norm.loc[matrix_norm.index == user].dropna(
                                                                 axis = 1,
                                                                 how = 'all'
                                                                 )
+    
 
     watched_sim = matrix_norm.loc[matrix_norm.index.isin(user_sim.index)]\
                     .dropna(axis = 1, how = 'all')\
                     .drop(watched_movie.columns, axis = 1, errors = 'ignore')
+    
+    
 
     for i in watched_sim.columns:
         rating = watched_sim[i]
@@ -117,6 +121,7 @@ def cf_user_cos (df, user, df_movie):
     item_score = pd.DataFrame(item_score.items(), 
                                   columns=['movie', 'movie_score'])
 
+    
     ranked_item = item_score.sort_values(by='movie_score', 
                                                ascending=False)[:10]
     
@@ -136,18 +141,22 @@ def reco_item_knn (df, user, df_movie):
     matrix_norm = matrix.subtract(matrix.mean(axis=1), axis = 0)
     matrix_norm.fillna(0, inplace=True)
 
+    
+
     unwatched_movie = matrix_norm[user].loc[matrix_norm[user]==0].reset_index().iloc[:,0:1]
+
 
     watched_movie = matrix_norm[user].loc[matrix_norm[user].notna()].sort_values(ascending=False)\
                                                 .reset_index()\
                                                 .rename(columns={user:'rating'})
+
 
     model_nn = NearestNeighbors(metric='cosine', algorithm='brute', n_neighbors=7, n_jobs=-1)
     model_nn.fit(matrix_norm)
 
     recommand = []
 
-    for movie in watched_movie['index'][:10]:
+    for movie in watched_movie['index'][:20]:
         distances, indices = model_nn.kneighbors(matrix_norm.loc[movie,:].values.reshape(1,-1))
 
         for i in range(0, len(distances.flatten())):
@@ -161,9 +170,13 @@ def reco_item_knn (df, user, df_movie):
     result = result.drop_duplicates(subset =['movieId'])
     result = result.loc[result['movieId'].isin(unwatched_movie['index'])]
 
+    
+
+
     reco = pd.merge(result, df_movie, left_on='movieId', right_on = 'movieId', how = 'left')
     reco = reco[['title', 'genres']][:5].to_html(index = False) 
     
+
     return reco
 
 if __name__ == '__main__':
