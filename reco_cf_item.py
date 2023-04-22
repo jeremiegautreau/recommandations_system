@@ -51,17 +51,9 @@ def cf_item_pearson(df, user, df_movie):
         :param df_movie:info on movies"""
 
     matrix = df.T
-    """ matrix = pd.pivot_table(df, 
-                        values = ['rating'],
-                        index = ['title'],
-                        columns = ['userId'],
-                       ) """
     matrix_norm = matrix.subtract(matrix.mean(axis=1), axis = 0) # normalization
-    # matrix_norm.columns = matrix_norm.columns.droplevel()
-    
     movie_corr = matrix_norm.T.corr() # pearson correlation matrix
     
-    # print(movie_corr.head())
 
     nb_item = 5 # nb of item for comparison
     nb_reco = 6 # nb of recommandations
@@ -72,7 +64,7 @@ def cf_item_pearson(df, user, df_movie):
 
     pred_mov = pd.merge(pred, df_movie, left_on='index', right_on = 'movieId', how = 'left')
 
-    reco =pred_mov[['title', 'genres']].to_html(index = False)
+    reco =pred_mov[['Titre', 'Genres']].to_html(index = False)
 
     return reco
 
@@ -126,7 +118,7 @@ def cf_user_cos (df, user, df_movie):
                                                ascending=False)[:10]
     
     reco = pd.merge(ranked_item, df_movie, left_on='movie', right_on = 'movieId', how = 'left')
-    reco = reco[['title', 'genres']].to_html(index=False)
+    reco = reco[['Titre', 'Genres']].to_html(index=False)
 
     return reco
 
@@ -174,7 +166,7 @@ def reco_item_knn (df, user, df_movie):
 
 
     reco = pd.merge(result, df_movie, left_on='movieId', right_on = 'movieId', how = 'left')
-    reco = reco[['title', 'genres']][:5].to_html(index = False) 
+    reco = reco[['Titre', 'Genres']][:5].to_html(index = False) 
     
 
     return reco
