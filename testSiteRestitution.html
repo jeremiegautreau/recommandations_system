@@ -76,19 +76,20 @@
 	<section class="container space-before">
 		<div class="row featurelist space-after">
 			<div class="col-md-5 col-sm-6 order-md-afeter">
-				<h2 class="space-before">Moteur 1: Item-based </h2>
-				<p>Description du Moteur N°1.</p>
-			</div>
-
-			<div class="col-md-5 col-sm-6 order-md-#"></div>
-				<img class="img-responsive rounded float-end" src="image/pearson_cor.png" alt="Sample image">
-			</div>
+			<h2 class="space-before">Moteur Item Base (les films similaires), </h2>
+			<p>Utilisation des informations sur les préférences passées des utilisateurs pour recommander des films qui pourraient vous intéresser.</p>
+			<p>Nous utilisons la corrélation de Pearson pour mesurer la similarité entre deux films, le principe fondateur est que si deux films ont une évaluation semblable dans la base de données (4.88 étoiles pour le film XXX et 4.91 étoiles pour le film YYY) il est probable que si vous aussi attribuer une évaluation proche pour un des deux films vous apprécierez le second.</p>
+		</div>
+		<div class="col-md-5 col-sm-6 order-md-#">
+			<img class="img-responsive rounded float-end" src="image/pearson_cor.png" alt="Sample image">
+		</div>	
 		</div>
 
 		<div class="row featurelist space-after">
 			<div class="col-md-5 col-sm-6 order-md-afeter">
-				<h2 class="space-before">Moteur 2: User-based </h2>
-				<p>Description du Moteur N°2.</p>
+				<h2 class="space-before">Moteur User Base (Les utilisateurs similaires), </h2>
+				<p>Comparaison de vos réponses avec celle des utilisateurs de la base de données ayant des réponses très proches et ainsi vous proposer les films que ces utilisateurs ont appréciés puisque vous avez des goûts similaires.</p>
+				<p>Pour ce moteur, nous utilisons la similarité cosinus pour trouver les utilisateurs les plus proches de vous.</p>
 			</div>
 
 			<div class="col-md-5 col-sm-6 order-md-#"></div>
@@ -98,9 +99,10 @@
 
 		<div class="row featurelist space-after">
 			<div class="col-md-5 col-sm-6 order-md-afeter">
-				<h2 class="space-before">Moteur 3: KNN </h2>
-				<p>Description du Moteur N°3.</p>
+				<h2 class="space-before">Moteur KNN (les plus proches voisins), </h2>
+				<p>La base de ce moteur de recommandation est un algorithme d’apprentissage automatique qui analyse les préférences des utilisateurs. On recherche les films similaires aux films que vous avez le mieux notés, en analysant la distance entre ces films.
 			</div>
+
 
 			<div class="col-md-5 col-sm-6 order-md-#"></div>
 				<img class="img-responsive rounded float-end" src="image/knn.png" alt="Sample image">
